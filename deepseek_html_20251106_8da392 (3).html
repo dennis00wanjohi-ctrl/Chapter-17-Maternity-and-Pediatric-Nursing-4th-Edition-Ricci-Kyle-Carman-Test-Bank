@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 17 Flashcards - Newborn Adaptation</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            width: 100vw;
+            height: 100vh;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            min-height: 80px;
+        }
+        
+        .header h1 {
+            font-size: clamp(18px, 4vw, 24px);
+            margin-bottom: 5px;
+            position: relative;
+        }
+        
+        .header .subtitle {
+            font-size: clamp(12px, 2vw, 14px);
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        .progress {
+            background: #34495e;
+            height: 6px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .flashcard {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            overflow: hidden;
+            padding: 15px;
+        }
+        
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            gap: 10px;
+        }
+        
+        .question-container {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            flex-shrink: 0;
+        }
+        
+        .question-icon {
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        .question {
+            font-size: clamp(15px, 2.5vw, 16px);
+            line-height: 1.5;
+            color: #2c3e50;
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        
+        .image-container {
+            text-align: center;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ecf0f1;
+            flex-shrink: 0;
+        }
+        
+        .concept-image {
+            max-width: 100%;
+            max-height: 110px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+        
+        .hint-container {
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 0;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            min-height: 0;
+        }
+        
+        .option:hover {
+            background: #e9ecef;
+            border-color: #95a5a6;
+        }
+        
+        .option-letter {
+            background: #ecf0f1;
+            color: #2c3e50;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+            color: white;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            display: flex;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            display: flex;
+        }
+        
+        .feedback-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            margin: 10px 0;
+        }
+        
+        .rationale {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #ffd43b;
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            flex-shrink: 0;
+        }
+        
+        .rationale.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .rationale h4 {
+            color: #856404;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+        
+        .rationale p {
+            color: #856404;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        
+        .hint {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 2px dashed #2196f3;
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            animation: slideIn 0.5s ease;
+            flex-shrink: 0;
+        }
+        
+        .hint.show {
+            display: block;
+        }
+        
+        .hint h4 {
+            color: #1565c0;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+        
+        .hint p {
+            color: #1565c0;
+            line-height: 1.4;
+            font-size: 13px;
+            font-style: italic;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #ecf0f1;
+            border-top: 1px solid #bdc3c7;
+            flex-shrink: 0;
+            min-height: 70px;
+        }
+        
+        .counter {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: white;
+        }
+        
+        .btn-hint {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+        
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .flashcard {
+                padding: 10px;
+            }
+            
+            .question-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            
+            .question-icon {
+                align-self: center;
+            }
+            
+            .navigation {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 10px 15px;
+            }
+            
+            .btn {
+                padding: 8px 16px;
+                flex: 1;
+                justify-content: center;
+                min-width: 100px;
+                font-size: 12px;
+            }
+            
+            .counter {
+                order: -1;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 5px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-buttons .btn {
+                min-width: 180px;
+            }
+            
+            .image-container {
+                max-height: 100px;
+            }
+            
+            .concept-image {
+                max-height: 90px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px 15px;
+                min-height: 70px;
+            }
+            
+            .flashcard {
+                padding: 8px;
+            }
+            
+            .navigation {
+                padding: 8px 12px;
+                min-height: 60px;
+            }
+            
+            .btn {
+                padding: 8px 12px;
+                font-size: 11px;
+                min-width: 80px;
+            }
+            
+            .options {
+                gap: 6px;
+            }
+            
+            .option {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .action-buttons .btn {
+                min-width: 140px;
+            }
+            
+            .question {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            .image-container {
+                display: none;
+            }
+            
+            .header {
+                padding: 10px 15px;
+                min-height: 60px;
+            }
+            
+            .navigation {
+                padding: 8px 15px;
+                min-height: 50px;
+            }
+            
+            .flashcard {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Chapter 17 Flashcards</h1>
+            <div class="subtitle">Newborn Adaptation - 30 Questions</div>
+            <div class="stats">
+                <div class="stat">🎯 30 Questions</div>
+                <div class="stat">💡 Hint Feature</div>
+                <div class="stat">🔄 Redo Questions</div>
+            </div>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="flashcard">
+            <div class="content-area">
+                <div class="question-container">
+                    <div class="question-icon">?</div>
+                    <div class="question" id="question"></div>
+                </div>
+                
+                <div class="image-container" id="imageContainer">
+                    <img class="concept-image" id="conceptImage" alt="Educational illustration">
+                </div>
+                
+                <div class="hint-container">
+                    <button class="btn btn-hint" id="hintBtn" onclick="showHint()">
+                        💡 Show Hint
+                    </button>
+                    <div class="hint" id="hint">
+                        <h4>💡 Study Tip:</h4>
+                        <p id="hintText"></p>
+                    </div>
+                </div>
+                
+                <div class="scrollable-content">
+                    <div class="options" id="options"></div>
+                    
+                    <div class="feedback" id="feedback">
+                        <div class="feedback-icon" id="feedbackIcon"></div>
+                        <div id="feedbackText"></div>
+                    </div>
+                    
+                    <div class="action-buttons" id="actionButtons" style="display: none;">
+                        <button class="btn btn-warning" id="retryBtn" onclick="retryQuestion()">
+                            🔄 Try Again
+                        </button>
+                        <button class="btn btn-primary" id="continueBtn" onclick="continueToNext()">
+                            ✅ Continue
+                        </button>
+                    </div>
+                    
+                    <div class="rationale" id="rationale">
+                        <h4>💡 Rationale:</h4>
+                        <p id="rationaleText"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousCard()">
+                ⬅️ Previous
+            </button>
+            <div class="counter" id="counter">1/30</div>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextCard()">
+                Next ➡️
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const medicalImages = {
+            'cardiac_respiratory': 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=200&fit=crop',
+            'digestive': 'https://images.unsplash.com/photo-1584467735871-8db9ac8e5e3a?w=400&h=200&fit=crop',
+            'newborn_behavior': 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=200&fit=crop',
+            'thermoregulation': 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=400&h=200&fit=crop',
+            'stool_patterns': 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400&h=200&fit=crop',
+            'transition_periods': 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=200&fit=crop',
+            'heat_loss': 'https://images.unsplash.com/photo-1584467735871-8db9ac8e5e3a?w=400&h=200&fit=crop',
+            'neurological': 'https://images.unsplash.com/photo-1599669454699-248893623440?w=400&h=200&fit=crop',
+            'sensory': 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&h=200&fit=crop',
+            'respiratory': 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=400&h=200&fit=crop'
+        };
+
+        const questions = [
+            {
+                question: "A nurse is explaining to a group of new parents about the changes that occur in the neonate to sustain extrauterine life, describing the cardiac and respiratory systems as undergoing the most changes. Which information would the nurse integrate into the explanation to support this description?",
+                options: [
+                    "The cardiac murmur heard at birth disappears by 48 hours of age.",
+                    "Pulmonary vascular resistance (PVR) is decreased as lungs begin to function.",
+                    "Heart rate remains elevated after the first few moments of birth.",
+                    "Breath sounds will have rhonchi for at least the first day of life as fluid is absorbed."
+                ],
+                correct: 1,
+                rationale: "Although all the body systems of the newborn undergo changes, respiratory gas exchange along with circulatory modifications must occur immediately to sustain extrauterine life. With the first breath, PVR decreases, and the heart rate initially increases but then decreases to 120 to 130 bpm after a few minutes. The ductal murmur will go away in 80+% of infants by 48 hours. Rhonchi caused by retained amniotic fluid is an abnormal finding and would not be expected.",
+                image: 'cardiac_respiratory',
+                hint: "Think about what happens with the first breath and how it affects blood flow through the lungs."
+            },
+            {
+                question: "A new mother reports that her newborn often spits up after feeding. Assessment reveals regurgitation. Which factor would the nurse integrate into the response?",
+                options: [
+                    "newborn being placed prone after feeding",
+                    "limited ability of digestive enzymes",
+                    "underdeveloped pyloric sphincter",
+                    "relaxed cardiac sphincter"
+                ],
+                correct: 3,
+                rationale: "The cardiac sphincter and nervous control of the stomach is immature, which may lead to uncoordinated peristaltic activity and frequent regurgitation. Placement of the newborn is unrelated to regurgitation. Most digestive enzymes are available at birth, but they are limited in their ability to digest complex carbohydrates and fats; this results in fatty stools, not regurgitation.",
+                image: 'digestive',
+                hint: "Think about which sphincter controls the opening from the esophagus to the stomach."
+            },
+            {
+                question: "Twenty minutes after birth, a baby begins to move his head from side to side, making eye contact with the mother, and pushes his tongue out several times. The nurse interprets this as:",
+                options: [
+                    "a good time to initiate breast-feeding.",
+                    "the period of decreased responsiveness preceding sleep.",
+                    "a sign that the infant is being overstimulated.",
+                    "evidence that the newborn is becoming chilled."
+                ],
+                correct: 0,
+                rationale: "The newborn is demonstrating behaviors indicating the first period of reactivity, which usually begins at birth and lasts for the first 30 minutes. This is a good time to initiate breastfeeding. Decreased responsiveness occurs from 30 to 120 minutes of age.",
+                image: 'newborn_behavior',
+                hint: "This behavior occurs during the first 30 minutes after birth and indicates alertness."
+            },
+            {
+                question: "The nurse institutes measures to maintain thermoregulation based on the understanding that newborns have limited ability to regulate body temperature because they:",
+                options: [
+                    "have a smaller body surface compared to body mass.",
+                    "lose more body heat when they sweat than adults.",
+                    "have an abundant amount of subcutaneous fat all over.",
+                    "are unable to shiver effectively to increase heat production."
+                ],
+                correct: 3,
+                rationale: "Newborns have difficulty maintaining their body heat through shivering and other mechanisms. They have a large body surface area relative to body weight and have limited sweating ability. Additionally, newborns lack subcutaneous fat to provide insulation.",
+                image: 'thermoregulation',
+                hint: "Newborns rely on non-shivering thermogenesis rather than shivering to produce heat."
+            },
+            {
+                question: "A new mother is changing the diaper of her 12-hour-old newborn and asks why the stool is black and sticky. Which response by the nurse would be most appropriate?",
+                options: [
+                    "\"You probably took iron during your pregnancy and that is what causes this type of stool.\"",
+                    "\"This is meconium stool and is normal for a newborn.\"",
+                    "\"I'll take a sample and check it for possible bleeding.\"",
+                    "\"This is unusual, and I need to report this to your pediatrician.\""
+                ],
+                correct: 1,
+                rationale: "Meconium is greenish-black and tarry and usually passed within 12 to 24 hours of birth. This is a normal finding. Iron can cause stool to turn black, but this would not be the case here.",
+                image: 'stool_patterns',
+                hint: "The first stool passed by newborns has a characteristic appearance and is normal."
+            },
+            {
+                question: "A client expresses concern that her 2-hour-old newborn is sleepy and difficult to awaken. The nurse explains that this behavior indicates:",
+                options: [
+                    "normal progression of behavior.",
+                    "probable hypoglycemia.",
+                    "physiological abnormality.",
+                    "inadequate oxygenation."
+                ],
+                correct: 0,
+                rationale: "From 30 to 120 minutes of age, the newborn enters the second stage of transition, that of sleep or a decrease in activity. More information would be needed to determine if hypoglycemia, a physiologic abnormality, or inadequate oxygenation was present.",
+                image: 'transition_periods',
+                hint: "This occurs during a specific time period in the newborn's transition to extrauterine life."
+            },
+            {
+                question: "After the birth of a newborn, which action would the nurse do first to assist in thermoregulation?",
+                options: [
+                    "Dry the newborn thoroughly.",
+                    "Put a hat on the newborn's head.",
+                    "Check the newborn's temperature.",
+                    "Wrap the newborn in a blanket."
+                ],
+                correct: 0,
+                rationale: "Drying the newborn immediately after birth using warmed blankets is essential to prevent heat loss through evaporation. Then the nurse would place a cap on the baby's head and wrap the newborn.",
+                image: 'heat_loss',
+                hint: "The immediate action prevents heat loss through evaporation from wet skin."
+            },
+            {
+                question: "Assessment of a newborn reveals rhythmic spontaneous movements. The nurse interprets this as indicating:",
+                options: [
+                    "habituation.",
+                    "motor maturity.",
+                    "orientation.",
+                    "social behaviors."
+                ],
+                correct: 1,
+                rationale: "Motor maturity is evidenced by rhythmic, spontaneous movements. Habituation is manifested by the newborn's ability to respond to the environment appropriately.",
+                image: 'neurological',
+                hint: "This refers to the coordination and quality of the newborn's movements."
+            },
+            {
+                question: "When teaching new parents about the sensory capabilities of their newborn, which sense would the nurse identify as being the least mature?",
+                options: [
+                    "hearing",
+                    "touch",
+                    "taste",
+                    "vision"
+                ],
+                correct: 3,
+                rationale: "Vision is the least mature sense at birth. Hearing is well developed at birth, evidenced by the newborn's response to noise by turning.",
+                image: 'sensory',
+                hint: "Newborns can see but have limited focusing ability and prefer high-contrast patterns."
+            },
+            {
+                question: "The nurse places a warmed blanket on the scale when weighing a newborn to minimize heat loss via which mechanism?",
+                options: [
+                    "evaporation",
+                    "conduction",
+                    "convection",
+                    "radiation"
+                ],
+                correct: 1,
+                rationale: "Using a warmed cloth diaper or blanket to cover any cold surface, such as a scale, that touches a newborn directly helps to prevent heat loss through conduction.",
+                image: 'heat_loss',
+                hint: "This type of heat loss occurs when the newborn is in direct contact with a cold surface."
+            },
+            {
+                question: "A nurse is assessing a newborn. Which finding would alert the nurse to the possibility of respiratory distress in a newborn?",
+                options: [
+                    "symmetrical chest movements",
+                    "periodic breathing",
+                    "respirations of 40 breaths/minute",
+                    "sternal retractions"
+                ],
+                correct: 3,
+                rationale: "Sternal retractions, cyanosis, tachypnea, expiratory grunting, and nasal flaring are signs of respiratory distress in a newborn.",
+                image: 'respiratory',
+                hint: "Look for signs that indicate the newborn is working hard to breathe."
+            },
+            {
+                question: "When describing the neurologic development of a newborn to parents, the nurse would explain that it occurs in which fashion?",
+                options: [
+                    "head-to-toe",
+                    "lateral-to-medial",
+                    "outward-to-inward",
+                    "distal-caudal"
+                ],
+                correct: 0,
+                rationale: "Neurologic development follows a cephalocaudal (head-to-toe) and proximal-distal (center to outside) pattern.",
+                image: 'neurological',
+                hint: "Think about the direction of development - from head downward."
+            },
+            {
+                question: "The nurse is assessing the respirations of several newborns. The nurse would notify the health care provider for the newborn with which respiratory rate at rest?",
+                options: [
+                    "38 breaths per minute",
+                    "46 breaths per minute",
+                    "54 breaths per minute",
+                    "68 breaths per minute"
+                ],
+                correct: 3,
+                rationale: "After respirations are established in the newborn, they are shallow and irregular, ranging from 30 to 60 breaths per minute.",
+                image: 'respiratory',
+                hint: "Normal newborn respiratory rate has a specific range - look for values outside this range."
+            },
+            {
+                question: "A new mother asks the nurse, \"Why has my baby lost weight since he was born?\" The nurse integrates knowledge of which cause when responding to the new mother?",
+                options: [
+                    "insufficient calorie intake",
+                    "shift of water from extracellular space to intracellular space",
+                    "increase in stool passage",
+                    "overproduction of bilirubin"
+                ],
+                correct: 0,
+                rationale: "Normally, term newborns lose 5% to 10% of their birth weight as a result of insufficient caloric intake within the first week after birth.",
+                image: 'stool_patterns',
+                hint: "Think about the initial adjustment period and nutritional intake in the first days."
+            },
+            {
+                question: "The nurse observes the stool of a newborn who is being bottle-fed. The newborn is 2 days old. What would the nurse expect to find?",
+                options: [
+                    "greenish black, tarry stool",
+                    "yellowish-brown, seedy stool",
+                    "yellow-gold, stringy stool",
+                    "yellowish-green, pasty stool"
+                ],
+                correct: 3,
+                rationale: "The milk stools of the formula-fed newborn vary depending on the type of formula ingested. They may be yellow, yellow-green, or greenish and loose, pasty, or formed in consistency.",
+                image: 'stool_patterns',
+                hint: "Formula-fed newborns have different stool characteristics than breastfed newborns."
+            },
+            {
+                question: "The nurse observes the stool of a newborn who has begun to breastfeed. Which finding would the nurse expect?",
+                options: [
+                    "greenish black, tarry stool",
+                    "yellowish-brown, seedy stool",
+                    "yellow-gold, stringy stool",
+                    "yellowish-green, pasty stool"
+                ],
+                correct: 1,
+                rationale: "After feedings are initiated, a transitional stool develops, which is greenish brown to yellowish brown, thinner in consistency, and seedy in appearance.",
+                image: 'stool_patterns',
+                hint: "This is the transitional stool that comes after meconium but before mature milk stool."
+            },
+            {
+                question: "A nurse is assessing a newborn and observes the newborn moving his head and eyes toward a loud sound. The nurse interprets this as which behavior?",
+                options: [
+                    "habituation",
+                    "motor maturity",
+                    "social behavior",
+                    "orientation"
+                ],
+                correct: 3,
+                rationale: "Orientation refers to the response of newborns to stimuli. It reflects newborns' response to auditory and visual stimuli.",
+                image: 'neurological',
+                hint: "This involves the newborn's ability to respond and attend to stimuli in the environment."
+            },
+            {
+                question: "A group of nurses are reviewing information about the changes in the newborn's lungs that must occur to maintain respiratory function. The nurses demonstrate understanding of this information when they identify which event as occurring first?",
+                options: [
+                    "expansion of the lungs",
+                    "increased pulmonary blood flow",
+                    "initiation of respiratory movement",
+                    "redistribution of cardiac output"
+                ],
+                correct: 2,
+                rationale: "Before the newborn's lungs can maintain respiratory function, the following events must occur: respiratory movement must be initiated; lungs must expand, functional residual capacity must be established.",
+                image: 'respiratory',
+                hint: "Think about the very first action that must happen for breathing to begin."
+            },
+            {
+                question: "A nurse is reviewing the laboratory test results of a newborn. Which result would the nurse identify as a cause for concern?",
+                options: [
+                    "hemoglobin 19 g/dL",
+                    "platelets 75,000/μL",
+                    "white blood cells 20,000/mm3",
+                    "hematocrit 52%"
+                ],
+                correct: 1,
+                rationale: "Normal newborn platelets range from 150,00 to 350,000/μL. Normal hemoglobin ranges from 17 to 23g/dL.",
+                image: 'cardiac_respiratory',
+                hint: "Compare each value to normal newborn ranges - one is significantly low."
+            },
+            {
+                question: "A nurse is preparing a presentation about ways to minimize heat loss in the newborn. Which measure would the nurse include to prevent heat loss through convection?",
+                options: [
+                    "placing a cap on a newborn's head",
+                    "working inside an isolette as much as possible.",
+                    "placing the newborn skin-to-skin with the mother",
+                    "using a radiant warmer to transport a newborn"
+                ],
+                correct: 1,
+                rationale: "To prevent heat loss by convection, the nurse would keep the newborn out of direct cool drafts in the environment, work inside an isolette as much as possible.",
+                image: 'heat_loss',
+                hint: "Convection involves heat loss to moving air currents."
+            },
+            {
+                question: "After teaching an in-service program to a group of nurses working in newborn nursery about a neutral thermal environment, the nurse determines that the teaching was successful when the group identifies which process as the newborn's primary method of heat production?",
+                options: [
+                    "convection",
+                    "nonshivering thermogenesis",
+                    "cold stress",
+                    "bilirubin conjugation"
+                ],
+                correct: 1,
+                rationale: "The newborn's primary method of heat production is through nonshivering thermogenesis, a process in which brown fat (adipose tissue) is oxidized in response to cold exposure.",
+                image: 'thermoregulation',
+                hint: "Newborns use a special type of fat tissue to generate heat without shivering."
+            },
+            {
+                question: "While observing the interaction between a newborn and the mother, the nurse notes the newborn nestling into the arms of the mother. The nurse identifies this as which behavior?",
+                options: [
+                    "habituation",
+                    "self-quieting ability",
+                    "social behaviors",
+                    "orientation"
+                ],
+                correct: 2,
+                rationale: "Social behaviors include cuddling and snuggling into the arms of the parent when the newborn is held.",
+                image: 'newborn_behavior',
+                hint: "This behavior involves interaction and bonding with caregivers."
+            },
+            {
+                question: "When explaining how a newborn adapts to extrauterine life, the nurse would describe which body systems as undergoing the most rapid changes?",
+                options: [
+                    "gastrointestinal and hepatic",
+                    "urinary and hematologic",
+                    "respiratory and cardiovascular",
+                    "neurological and integumentary"
+                ],
+                correct: 2,
+                rationale: "Although all the body systems of the newborn undergo changes, respiratory gas exchange along with circulatory modifications must occur immediately to sustain extrauterine life",
+                image: 'cardiac_respiratory',
+                hint: "These two systems must work immediately for survival outside the womb."
+            },
+            {
+                question: "A nurse is teaching a group of new parents about their newborns' sensory capabilities. The nurse would identify which sense as being well-developed at birth?",
+                options: [
+                    "hearing",
+                    "touch",
+                    "taste",
+                    "vision"
+                ],
+                correct: 0,
+                rationale: "Hearing is well developed at birth, evidenced by the newborn's response to noise by turning. Vision is the least mature sense at birth.",
+                image: 'sensory',
+                hint: "Newborns can recognize their mother's voice shortly after birth."
+            },
+            {
+                question: "The nurse dries the neonate thoroughly and promptly changes wet linens. The nurse does so to minimize heat loss via which mechanism?",
+                options: [
+                    "evaporation",
+                    "conduction",
+                    "convection",
+                    "radiation"
+                ],
+                correct: 0,
+                rationale: "Drying a newborn and promptly changing wet linens, clothes, or diapers help reduce heat loss via evaporation.",
+                image: 'heat_loss',
+                hint: "This type of heat loss occurs when moisture on the skin turns to vapor."
+            },
+            {
+                question: "A nurse is teaching a new mother about her newborn's immune status. The nurse determines that the teaching was successful when the mother states which immunoglobulin as having crossed the placenta?",
+                options: [
+                    "IgA",
+                    "IgG",
+                    "IgM",
+                    "IgE"
+                ],
+                correct: 1,
+                rationale: "IgG is the major immunoglobulin and the most abundant, making up about 80% of all circulating antibodies. It is the only class able to cross the placenta.",
+                image: 'cardiac_respiratory',
+                hint: "This is the most common antibody that provides passive immunity to the newborn."
+            },
+            {
+                question: "The nurse is teaching a group of parents about the similarities and differences between newborn skin and adult skin. Which statement by the group indicates that additional teaching is needed?",
+                options: [
+                    "\"The newborn's skin and that of an adult are similar in thickness.\"",
+                    "\"The newborn's sweat glands function fully, just like those of an adult.\"",
+                    "\"Skin development in the newborn is not complete at birth.\"",
+                    "\"The newborn has fewer fibrils connecting the dermis and epidermis.\""
+                ],
+                correct: 1,
+                rationale: "The newborn has sweat glands, like an adult, but full adult functioning is not present until the second or third year of life.",
+                image: 'neurological',
+                hint: "Newborn sweat glands are present but not fully functional."
+            },
+            {
+                question: "A newborn is experiencing cold stress. Which findings would the nurse expect to assess?",
+                options: [
+                    "respiratory distress",
+                    "decreased oxygen needs",
+                    "hypoglycemia",
+                    "metabolic alkalosis",
+                    "jaundice"
+                ],
+                correct: [0, 2, 4],
+                rationale: "Cold stress in the newborn can lead to the following problems if not reversed: depleted brown fat stores, increased oxygen needs, respiratory distress, increased glucose consumption leading to hypoglycemia, metabolic acidosis, jaundice.",
+                image: 'thermoregulation',
+                hint: "Cold stress increases metabolic demands and affects multiple body systems."
+            },
+            {
+                question: "A nurse is preparing a class on newborn adaptations for a group of soon-to-be parents. When describing the change from fetal to newborn circulation, which information would the nurse include?",
+                options: [
+                    "Decrease in right atrial pressure leads to closure of the foramen ovale.",
+                    "Increase in oxygen levels leads to a decrease in systemic vascular resistance.",
+                    "Onset of respirations leads to a decrease in pulmonary vascular resistance.",
+                    "Increase in pressure in the left atrium results from increases in pulmonary blood flow.",
+                    "Closure of the ductus venosus eventually forces closure of the ductus arteriosus."
+                ],
+                correct: [0, 2, 3, 4],
+                rationale: "When the umbilical cord is clamped, the first breath is taken, and the lungs begin to function. As a result, systemic vascular resistance increases and blood return to the heart via the inferior vena cava decreases.",
+                image: 'cardiac_respiratory',
+                hint: "Multiple changes occur simultaneously to transition from fetal to newborn circulation."
+            },
+            {
+                question: "A nurse is assessing a newborn who is about 4½ hours old. The nurse would expect this newborn to exhibit which behavior?",
+                options: [
+                    "sleeping",
+                    "interest in environmental stimuli",
+                    "passage of meconium",
+                    "difficulty arousing the newborn",
+                    "spontaneous Moro reflexes"
+                ],
+                correct: [1, 2],
+                rationale: "The newborn is in the second period of reactivity, which begins as the newborn awakens and shows an interest in environmental stimuli. Peristalsis also increases. Thus, it is not uncommon for the newborn to pass meconium or void during this period.",
+                image: 'transition_periods',
+                hint: "This occurs during the second period of reactivity when the newborn becomes alert again."
+            }
+        ];
+
+        let currentCard = 0;
+        let selectedOption = null;
+        let hintUsed = false;
+        let answerSubmitted = false;
+
+        function loadCard() {
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const feedbackElement = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+            const rationaleElement = document.getElementById('rationale');
+            const rationaleText = document.getElementById('rationaleText');
+            const counterElement = document.getElementById('counter');
+            const progressBar = document.getElementById('progressBar');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const imageContainer = document.getElementById('imageContainer');
+            const conceptImage = document.getElementById('conceptImage');
+            const hintElement = document.getElementById('hint');
+            const hintText = document.getElementById('hintText');
+            const hintBtn = document.getElementById('hintBtn');
+            const actionButtons = document.getElementById('actionButtons');
+
+            // Update progress and counter
+            progressBar.style.width = `${((currentCard + 1) / questions.length) * 100}%`;
+            counterElement.textContent = `${currentCard + 1}/${questions.length}`;
+
+            // Update navigation buttons
+            prevBtn.disabled = currentCard === 0;
+            nextBtn.disabled = true;
+
+            // Clear previous state
+            questionElement.textContent = questions[currentCard].question;
+            optionsElement.innerHTML = '';
+            feedbackElement.className = 'feedback';
+            rationaleElement.className = 'rationale';
+            hintElement.className = 'hint';
+            actionButtons.style.display = 'none';
+            selectedOption = null;
+            hintUsed = false;
+            answerSubmitted = false;
+            hintBtn.disabled = false;
+            hintBtn.textContent = "💡 Show Hint";
+
+            // Load image
+            const imageKey = questions[currentCard].image;
+            if (medicalImages[imageKey]) {
+                conceptImage.src = medicalImages[imageKey];
+                conceptImage.alt = `Illustration for ${questions[currentCard].question.substring(0, 50)}...`;
+                imageContainer.style.display = 'flex';
+            } else {
+                imageContainer.style.display = 'none';
+            }
+
+            // Set hint text
+            hintText.textContent = questions[currentCard].hint;
+
+            // Create options
+            questions[currentCard].options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                optionElement.onclick = () => selectOption(index);
+                optionsElement.appendChild(optionElement);
+            });
+        }
+
+        function showHint() {
+            if (answerSubmitted) return;
+            
+            const hintElement = document.getElementById('hint');
+            const hintBtn = document.getElementById('hintBtn');
+            
+            hintElement.classList.add('show');
+            hintBtn.disabled = true;
+            hintBtn.textContent = "💡 Hint Shown";
+            hintUsed = true;
+        }
+
+        function selectOption(index) {
+            if (answerSubmitted) return;
+
+            selectedOption = index;
+            answerSubmitted = true;
+            const options = document.querySelectorAll('.option');
+            const feedbackElement = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+            const rationaleElement = document.getElementById('rationale');
+            const rationaleText = document.getElementById('rationaleText');
+            const nextBtn = document.getElementById('nextBtn');
+            const hintBtn = document.getElementById('hintBtn');
+            const actionButtons = document.getElementById('actionButtons');
+            const hintElement = document.getElementById('hint');
+
+            // Check if correct (handle both single answer and multiple select questions)
+            const isCorrect = Array.isArray(questions[currentCard].correct) 
+                ? questions[currentCard].correct.includes(index)
+                : index === questions[currentCard].correct;
+
+            options.forEach((option, i) => {
+                if (Array.isArray(questions[currentCard].correct)) {
+                    if (questions[currentCard].correct.includes(i)) {
+                        option.classList.add('correct');
+                    } else if (i === index && !questions[currentCard].correct.includes(i)) {
+                        option.classList.add('incorrect');
+                    }
+                } else {
+                    if (i === questions[currentCard].correct) {
+                        option.classList.add('correct');
+                    } else if (i === index && i !== questions[currentCard].correct) {
+                        option.classList.add('incorrect');
+                    }
+                }
+            });
+
+            if (isCorrect) {
+                feedbackIcon.textContent = "✅";
+                feedbackText.textContent = "Correct!";
+                feedbackElement.className = 'feedback correct';
+                actionButtons.style.display = 'none';
+                nextBtn.disabled = false;
+            } else {
+                feedbackIcon.textContent = "❌";
+                feedbackText.textContent = "Incorrect!";
+                feedbackElement.className = 'feedback incorrect';
+                actionButtons.style.display = 'flex';
+                nextBtn.disabled = true;
+                
+                // Automatically show hint when answer is incorrect
+                hintElement.classList.add('show');
+                hintBtn.disabled = true;
+                hintBtn.textContent = "💡 Hint Shown";
+                hintUsed = true;
+            }
+
+            rationaleText.textContent = questions[currentCard].rationale;
+            rationaleElement.classList.add('show');
+            hintBtn.disabled = true;
+        }
+
+        function retryQuestion() {
+            const options = document.querySelectorAll('.option');
+            const feedbackElement = document.getElementById('feedback');
+            const rationaleElement = document.getElementById('rationale');
+            const actionButtons = document.getElementById('actionButtons');
+            const hintBtn = document.getElementById('hintBtn');
+            const hintElement = document.getElementById('hint');
+
+            // Reset the question state
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            feedbackElement.className = 'feedback';
+            rationaleElement.className = 'rationale';
+            actionButtons.style.display = 'none';
+            selectedOption = null;
+            answerSubmitted = false;
+            
+            // Keep hint visible if it was shown due to incorrect answer
+            if (hintUsed) {
+                hintElement.classList.add('show');
+                hintBtn.disabled = true;
+                hintBtn.textContent = "💡 Hint Shown";
+            } else {
+                hintElement.classList.remove('show');
+                hintBtn.disabled = false;
+                hintBtn.textContent = "💡 Show Hint";
+            }
+        }
+
+        function continueToNext() {
+            nextCard();
+        }
+
+        function nextCard() {
+            if (currentCard < questions.length - 1) {
+                currentCard++;
+                loadCard();
+            }
+        }
+
+        function previousCard() {
+            if (currentCard > 0) {
+                currentCard--;
+                loadCard();
+            }
+        }
+
+        // Initialize the first card
+        loadCard();
+    </script>
+</body>
+</html>
